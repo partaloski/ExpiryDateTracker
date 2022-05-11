@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Switch
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.expirydatetracker.R
@@ -22,7 +23,10 @@ class LoginFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var passwordField : EditText
     private lateinit var usernameField : EditText
+    private lateinit var rememberMeSwitch: Switch
+
     private lateinit var viewmodel : LoginFragmentViewmodel;
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,7 +39,6 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewmodel = LoginFragmentViewmodel(application = requireActivity().application)
-        viewmodel.wakeUp()
         binding.buttonRegister.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_registerFragment)
         }
@@ -45,11 +48,12 @@ class LoginFragment : Fragment() {
         binding.buttonLogin.setOnClickListener {
             passwordField = requireView().findViewById(R.id.passwordField)
             usernameField = requireView().findViewById(R.id.usernameField)
+            rememberMeSwitch = requireView().findViewById(R.id.switchRememberMe)
             if(passwordField.text.isNullOrEmpty() || usernameField.text.isNullOrEmpty()){
                 Toast.makeText(context, "The fields of username and password are required.", Toast.LENGTH_SHORT).show()
             }
             else{
-                viewmodel.login(username = usernameField.text.toString(), password = passwordField.text.toString(), this)
+                viewmodel.login(username = usernameField.text.toString(), password = passwordField.text.toString(), this, rememberMeSwitch)
             }
         }
     }

@@ -12,6 +12,7 @@ import com.example.expirydatetracker.models.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.util.*
 
 class AppDatabase {
@@ -299,7 +300,24 @@ class AppDatabase {
             if(!LoadingFragment.loadedDataOnce){
                 LoadingFragment.loadedDataOnce = true
                 Handler().postDelayed({
-                                      fragment.findNavController().navigate(R.id.action_loadingFragment_to_FirstFragment)
+                    val path = fragment.requireContext().filesDir
+                    val fileLogin = File(path, "info.txt")
+                    if(!fileLogin.exists()){
+                        fragment.findNavController().navigate(R.id.action_loadingFragment_to_FirstFragment)
+                    }
+                    else{
+                        val text = fileLogin.readText()
+                        val lines : List<String> = text.split("\n")
+                        if(lines.size == 2){
+                            MainActivity.username = lines[0]
+                            MainActivity.auth_code = lines[1]
+                            MainActivity.logoutAvailable = true
+                            fragment.requireActivity().invalidateOptionsMenu()
+                            fragment.findNavController().navigate(R.id.action_loadingFragment_to_SecondFragment)
+                        }
+                        else
+                            fragment.findNavController().navigate(R.id.action_loadingFragment_to_FirstFragment)
+                    }
                 }, 2000)
             }
             else{

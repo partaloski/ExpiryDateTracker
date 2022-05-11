@@ -13,6 +13,7 @@ import android.view.MenuItem
 import androidx.fragment.app.FragmentManager
 import com.example.expirydatetracker.R
 import com.example.expirydatetracker.databinding.ActivityMainBinding
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,8 +38,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         starterIntent = intent;
-
-        AppDatabase.refreshData()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -73,6 +72,10 @@ class MainActivity : AppCompatActivity() {
                 if(auth_code != null && username != null){
                     auth_code = null
                     username = null
+                    val path = filesDir
+                    var fileLogin = File(path, "info.txt")
+                    fileLogin.createNewFile()
+                    fileLogin.writeText("")
                     finish()
                     startActivity(starterIntent)
                     invalidateOptionsMenu()

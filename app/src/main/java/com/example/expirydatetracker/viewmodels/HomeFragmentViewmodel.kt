@@ -13,8 +13,4 @@ class HomeFragmentViewmodel(application: Application): AndroidViewModel(applicat
         api = EDTApiClient.getApi()
         app = application
     }
-
-    public fun load_data(){
-
-    }
 }
